@@ -1,0 +1,13 @@
+# aqtsvngui - Another Qt Subversion Graphical User Interface
+# started by gogoprog @ gmail . com
+
+## Description
+
+aqtsvngui is a front-end for svn command line written in C++ and Qt4.
+
+
+## Purpose
+
+The main purpose is to be a clone of TortoiseSVN commit window.
+
+
