@@ -11,11 +11,18 @@ class MainWindow : public QWidget
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    
+    static MainWindow & getInstance() {
+        return *instance;
+    }
+
+    void addLogLine(const QString &line);
 
 public slots:
     void commitButtonClicked();
 
 private:
+    static MainWindow *instance;
     Ui::aqtsvnguiClass ui;
 };
 

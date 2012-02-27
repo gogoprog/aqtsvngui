@@ -1,5 +1,6 @@
 #include "svnmanager.h"
 
+#include "mainwindow.h"
 #include <QString>
 #include <QStringList>
 #include <stdio.h>
@@ -29,7 +30,8 @@ void SVNManager::analyze(const QString & path)
     {
         FILE *fp;
         char buffer[256];
-
+        int status;
+        
         fp = popen(command.toAscii(), "r");
 
         if (fp == NULL)
@@ -40,7 +42,7 @@ void SVNManager::analyze(const QString & path)
             parseLine(buffer);
         }
 
-        pclose(fp);
+        status = pclose(fp);
     }
 }
 
@@ -51,6 +53,7 @@ void SVNManager::parseLine(const QString & line)
     QStringList fieldList;
 
     if (line.contains("warning")) {
+        MainWindow::getInstance().addLogLine(line);
         return;
     }
 
