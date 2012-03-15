@@ -10,25 +10,31 @@ class SVNEntry
 public:
     enum Status {
         Unversioned,
-        Modified
+        Modified,
+        Deleted,
+        Added
     };
 
     SVNEntry();
     ~SVNEntry();
 
-    Status getStatus() const {
+    Status getStatus() const
+    {
         return status;
     }
 
-    const QString & getRelativePath() const {
+    const QString & getRelativePath() const
+    {
         return relativePath;
     }
 
-    bool isSelected() const {
+    bool isSelected() const
+    {
         return itIsSelected;
     }
 
-    void setIsSelected(const bool value) {
+    void setIsSelected(const bool value)
+    {
         itIsSelected = value;
     }
 

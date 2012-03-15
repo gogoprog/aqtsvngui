@@ -38,10 +38,16 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     if(index.column() == 2) {
         switch(SVNManager::getInstance().getEntryList()[index.row()]->getStatus()) {
             case SVNEntry::Modified:
-                return QVariant("Modified");
+                return QVariant("modified");
                 break;
             case SVNEntry::Unversioned:
-                return QVariant("Unversioned");
+                return QVariant("unversioned");
+                break;
+            case SVNEntry::Deleted:
+                return QVariant("deleted");
+                break;
+            case SVNEntry::Added:
+                return QVariant("added");
                 break;
         }
     }
@@ -49,7 +55,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     return QVariant("Impossible");
 }
 
-bool TreeModel::setData(const QModelIndex & index, const QVariant & value, int role)
+bool TreeModel::setData(const QModelIndex & index, const QVariant & /*value*/, int /*role*/)
 {
     if (index.column() == 0) {
         SVNEntry *entry = static_cast<SVNEntry *>(index.internalPointer());
@@ -99,7 +105,7 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) con
     return createIndex(row, column, SVNManager::getInstance().getEntryList()[row]);
 }
 
-QModelIndex TreeModel::parent(const QModelIndex &index) const
+QModelIndex TreeModel::parent(const QModelIndex &/*index*/) const
 {
     return QModelIndex();
 }

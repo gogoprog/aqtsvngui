@@ -9,12 +9,21 @@
 
 SVNManager::SVNManager()
 {
-
+    memset(filterIsEnabled, 1, sizeof(bool) * FilterCount);
 }
 
 SVNManager::~SVNManager()
 {
+    clear();
+}
 
+void SVNManager::clear()
+{
+    foreach(SVNEntry *entry, entryList) {
+        delete entry;
+    }
+
+    entryList.clear();
 }
 
 void SVNManager::analyze(const QString & path)
@@ -30,7 +39,6 @@ void SVNManager::analyze(const QString & path)
     {
         FILE *fp;
         char buffer[256];
-        int status;
         
         fp = popen(command.toAscii(), "r");
 
@@ -42,8 +50,33 @@ void SVNManager::analyze(const QString & path)
             parseLine(buffer);
         }
 
-        status = pclose(fp);
+        pclose(fp);
     }
+
+    currentPath = path;
+}
+
+void SVNManager::commit(const QString & message)
+{
+    QString command;
+
+    command += "svn ci ";
+
+    foreach(const SVNEntry *entry, entryList) {
+        if(entry->isSelected()) {
+            command += "\"" + entry->getRelativePath() + "\" ";
+        }
+    }
+
+    command += "-m \"" + message + "\"";
+
+    qDebug(command.toAscii());
+}
+
+void SVNManager::updateCurrent()
+{
+    clear();
+    analyze(currentPath);
 }
 
 // Private:
@@ -61,16 +94,29 @@ void SVNManager::parseLine(const QString & line)
 
     fieldList = line.split(' ', QString::SkipEmptyParts);
 
-    if (fieldList[0] == "?") {
-        entry->status = SVNEntry::Unversioned;
+    if(fieldList.size()<2)
+        return;
+
+    switch(fieldList[0].toAscii()[0]) {
+        case '?':
+            entry->status = SVNEntry::Unversioned;
+            break;
+        case 'M':
+            entry->status = SVNEntry::Modified;
+            break;
+        case 'D':
+            entry->status = SVNEntry::Deleted;
+            break;
+        case 'A':
+            entry->status = SVNEntry::Added;
+            break;
     }
-    else if (fieldList[0] == "M") {
-        entry->status = SVNEntry::Modified;
-    }
+
 
     fieldList[1].remove('\n');
 
     entry->relativePath = fieldList[1];
 
-    entryList.push_back(entry);
+    if(filterIsEnabled[int(entry->status)])
+        entryList.push_back(entry);
 }

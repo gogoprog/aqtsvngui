@@ -75,9 +75,60 @@
         <property name="title">
          <string>Files list</string>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QTreeView" name="treeView"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Filters :</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="filterBox0">
+             <property name="text">
+              <string>unversioned</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="filterBox1">
+             <property name="text">
+              <string>added</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="filterBox2">
+             <property name="text">
+              <string>deleted</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="filterBox3">
+             <property name="text">
+              <string>modified</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -189,6 +240,86 @@
     <hint type="destinationlabel">
      <x>443</x>
      <y>302</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>aqtsvnguiClass</receiver>
+   <slot>lineEditReturnPressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>235</x>
+     <y>40</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>276</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filterBox0</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>aqtsvnguiClass</receiver>
+   <slot>filterChanged0(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>276</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filterBox1</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>aqtsvnguiClass</receiver>
+   <slot>filterChanged1(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>276</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filterBox2</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>aqtsvnguiClass</receiver>
+   <slot>filterChanged2(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>276</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filterBox3</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>aqtsvnguiClass</receiver>
+   <slot>filterChanged3(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>177</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>276</x>
+     <y>297</y>
     </hint>
    </hints>
   </connection>

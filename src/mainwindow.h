@@ -18,10 +18,19 @@ public:
 
     void addLogLine(const QString &line);
 
+
 public slots:
     void commitButtonClicked();
+    void lineEditReturnPressed();
+    void filterChanged0(int state);
+    void filterChanged1(int state);
+    void filterChanged2(int state);
+    void filterChanged3(int state);
 
 private:
+    void fillFromPath(const QString & path);
+    void applyTreeModel();
+
     static MainWindow *instance;
     Ui::aqtsvnguiClass ui;
 };
