@@ -16,8 +16,9 @@ public:
         return *instance;
     }
 
-    void addLogLine(const QString &line);
-
+    void startLogMode();
+    void endLogMode();
+    void applyTreeModel();
 
 public slots:
     void commitButtonClicked();
@@ -26,10 +27,14 @@ public slots:
     void filterChanged1(int state);
     void filterChanged2(int state);
     void filterChanged3(int state);
+    void addLogLine(const QString &line);
+    void addLog(const QString &line);
+    void analyzeTerminated(bool success);
+    void commitTerminated(bool success);
 
 private:
     void fillFromPath(const QString & path);
-    void applyTreeModel();
+
 
     static MainWindow *instance;
     Ui::aqtsvnguiClass ui;

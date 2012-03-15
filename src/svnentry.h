@@ -12,7 +12,8 @@ public:
         Unversioned,
         Modified,
         Deleted,
-        Added
+        Added,
+        Unknown
     };
 
     SVNEntry();

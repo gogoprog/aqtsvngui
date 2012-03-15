@@ -49,6 +49,9 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
             case SVNEntry::Added:
                 return QVariant("added");
                 break;
+            default:
+                return QVariant("?");
+                break;
         }
     }
 

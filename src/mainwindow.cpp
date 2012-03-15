@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 #include <QDir>
+#include <QTextCursor>
 #include "treemodel.h"
 #include "svnmanager.h"
 #include "svnentry.h"
@@ -26,10 +27,22 @@ MainWindow::~MainWindow()
 
 }
 
-void MainWindow::addLogLine(const QString &line)
+void MainWindow::startLogMode()
 {
-    ui.textEdit->append(line);
-    ui.textEdit->append("\n");
+    ui.textEdit->setEnabled(false);
+    ui.textEdit->clear();
+}
+
+void MainWindow::endLogMode()
+{
+    ui.textEdit->setEnabled(true);
+}
+
+void MainWindow::applyTreeModel()
+{
+    ui.treeView->setModel(new TreeModel());
+    ui.treeView->setColumnWidth(0, 48);
+    ui.treeView->setColumnWidth(1, 128);
 }
 
 // Public slots:
@@ -76,22 +89,42 @@ void MainWindow::filterChanged3(int state)
     applyTreeModel();
 }
 
+void MainWindow::addLogLine(const QString &line)
+{
+    ui.textEdit->append(line);
+}
+
+void MainWindow::addLog(const QString &text)
+{
+    QTextCursor textCursor = ui.textEdit->textCursor();
+    textCursor.insertText(text);
+    textCursor.movePosition(QTextCursor::End);
+    ui.textEdit->setTextCursor(textCursor);
+}
+
+void MainWindow::analyzeTerminated(bool success)
+{
+    if(success) {
+        endLogMode();
+        applyTreeModel();
+        ui.textEdit->clear();
+    }
+}
+
+void MainWindow::commitTerminated(bool success)
+{
+    if(success)
+        ui.commitButton->setText("Ok");
+}
+
 // Private:
 
 void MainWindow::fillFromPath(const QString & path)
 {
+    ui.treeView->setModel(NULL);
     SVNManager::getInstance().clear();
     SVNManager::getInstance().analyze(path);
     ui.lineEdit->setText(path);
-
-    applyTreeModel();
-}
-
-void MainWindow::applyTreeModel()
-{
-    ui.treeView->setModel(new TreeModel());
-    ui.treeView->setColumnWidth(0, 48);
-    ui.treeView->setColumnWidth(1, 128);
 }
 
 MainWindow *MainWindow::instance = NULL;

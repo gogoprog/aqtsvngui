@@ -1,11 +1,81 @@
 #include "svnmanager.h"
 
-#include "mainwindow.h"
 #include <QString>
 #include <QStringList>
+#include <QMetaObject>
+#include <QDir>
 #include <stdio.h>
+#include "mainwindow.h"
 
 // Public:
+
+void SVNManager::Job::addLog(const QString & text)
+{
+    QMetaObject::invokeMethod(&MainWindow::getInstance(), "addLog", Qt::QueuedConnection, Q_ARG(QString, text));
+}
+
+void SVNManager::Job::addLogLine(const QString & text)
+{
+    QMetaObject::invokeMethod(&MainWindow::getInstance(), "addLogLine", Qt::QueuedConnection, Q_ARG(QString, text));
+}
+
+void SVNManager::AnalyzeJob::run()
+{
+    QString command;
+    FILE *fp;
+    char buffer[256];
+
+    addLogLine("Analyzing " + path + " ..." );
+
+    command += "svn st";
+
+    fp = popen(command.toAscii(), "r");
+
+    if (fp == NULL)
+        return;
+
+    while (fgets(buffer, 256, fp) != NULL) {
+        SVNManager::getInstance().parseLine(buffer);
+        addLog(".");
+    }
+
+    pclose(fp);
+
+
+    SVNManager::getInstance().currentPath = path;
+
+    QMetaObject::invokeMethod(&MainWindow::getInstance(), "analyzeTerminated", Qt::QueuedConnection, Q_ARG(bool, true));
+}
+
+void SVNManager::CommitJob::run()
+{
+    QString command;
+    FILE *fp;
+    char buffer[256];
+
+    command += "svn ci ";
+
+    foreach(const SVNEntry *entry, SVNManager::getInstance().entryList) {
+        if(entry->isSelected()) {
+            command += "\"" + entry->getRelativePath() + "\" ";
+        }
+    }
+
+    command += "-m \"" + message + "\"";
+
+    fp = popen(command.toAscii(), "r");
+
+    if (fp == NULL)
+        return;
+
+    while (fgets(buffer, 256, fp) != NULL) {
+        addLog(buffer);
+    }
+
+    pclose(fp);
+
+    QMetaObject::invokeMethod(&MainWindow::getInstance(), "commitTerminated", Qt::QueuedConnection, Q_ARG(bool, true));
+}
 
 SVNManager::SVNManager()
 {
@@ -28,49 +98,20 @@ void SVNManager::clear()
 
 void SVNManager::analyze(const QString & path)
 {
-    QString command;
-
     if(path != ".") {
-        command += "cd " + path + " && ";
+        QDir::setCurrent(path);
     }
 
-    command += "svn st";
-
-    {
-        FILE *fp;
-        char buffer[256];
-        
-        fp = popen(command.toAscii(), "r");
-
-        if (fp == NULL)
-            return;
-
-
-        while (fgets(buffer, 256, fp) != NULL) {
-            parseLine(buffer);
-        }
-
-        pclose(fp);
-    }
-
-    currentPath = path;
+    MainWindow::getInstance().startLogMode();
+    analyzeJob.path = path;
+    analyzeJob.start();
 }
 
 void SVNManager::commit(const QString & message)
 {
-    QString command;
-
-    command += "svn ci ";
-
-    foreach(const SVNEntry *entry, entryList) {
-        if(entry->isSelected()) {
-            command += "\"" + entry->getRelativePath() + "\" ";
-        }
-    }
-
-    command += "-m \"" + message + "\"";
-
-    qDebug(command.toAscii());
+    MainWindow::getInstance().startLogMode();
+    commitJob.message = message;
+    commitJob.start();
 }
 
 void SVNManager::updateCurrent()
@@ -110,8 +151,10 @@ void SVNManager::parseLine(const QString & line)
         case 'A':
             entry->status = SVNEntry::Added;
             break;
+        default:
+            entry->status = SVNEntry::Unknown;
+            break;
     }
-
 
     fieldList[1].remove('\n');
 

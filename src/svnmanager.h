@@ -3,17 +3,41 @@
 
 #include "svnentry.h"
 #include <QList>
+#include <QThread>
+#include <QObject>
 
 class SVNManager
 {
 public:
-    SVNManager();
-    ~SVNManager();
 
     enum
     {
         FilterCount = 4
     };
+
+    class Job : public QThread
+    {
+    public:
+        void addLog(const QString &);
+        void addLogLine(const QString &);
+    };
+
+    class AnalyzeJob : public Job
+    {
+    public:
+        void run();
+        QString path;
+    };
+
+    class CommitJob : public Job
+    {
+    public:
+        void run();
+        QString message;
+    };
+
+    SVNManager();
+    ~SVNManager();
 
     static SVNManager & getInstance()
     {
@@ -42,6 +66,8 @@ private:
     QList<SVNEntry *> entryList;
     bool filterIsEnabled[FilterCount];
     QString currentPath;
+    AnalyzeJob analyzeJob;
+    CommitJob commitJob;
 
 };
 
