@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QTextCursor>
+#include <QFileDialog>
 #include "treemodel.h"
 #include "svnmanager.h"
 #include "svnentry.h"
@@ -17,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui.setupUi(this);
 
-    currentPath = getenv("PWD");
+    currentPath = QDir::currentPath();
 
     fillFromPath(currentPath);
 }
@@ -41,11 +42,17 @@ void MainWindow::endLogMode()
 void MainWindow::applyTreeModel()
 {
     ui.treeView->setModel(new TreeModel());
-    ui.treeView->setColumnWidth(0, 48);
-    ui.treeView->setColumnWidth(1, 128);
+    ui.treeView->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+    ui.treeView->header()->setResizeMode(1, QHeaderView::ResizeToContents);
 }
 
 // Public slots:
+
+void MainWindow::browseButtonClicked()
+{
+    QString path = QFileDialog::getExistingDirectory(this, tr("Open Directory"), QDir::currentPath(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    fillFromPath(path);
+}
 
 void MainWindow::commitButtonClicked()
 {

@@ -133,6 +133,7 @@ void SVNManager::updateCurrent()
 void SVNManager::parseLine(const QString & line)
 {
     QStringList fieldList;
+    int lastFieldIndex;
 
     if (line.contains("warning")) {
         MainWindow::getInstance().addLogLine(line);
@@ -164,9 +165,11 @@ void SVNManager::parseLine(const QString & line)
             break;
     }
 
-    fieldList[1].remove('\n');
+    lastFieldIndex = fieldList.size() - 1;
 
-    entry->relativePath = fieldList[1];
+    fieldList[lastFieldIndex].remove('\n');
+
+    entry->relativePath = fieldList[lastFieldIndex];
 
     if(filterIsEnabled[int(entry->status)])
         entryList.push_back(entry);

@@ -21,6 +21,7 @@ public:
     void applyTreeModel();
 
 public slots:
+    void browseButtonClicked();
     void commitButtonClicked();
     void lineEditReturnPressed();
     void filterChanged0(int state);

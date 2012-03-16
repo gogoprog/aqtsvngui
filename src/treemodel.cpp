@@ -18,7 +18,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role == Qt::CheckStateRole && index.column() == 0) {
+    if (role == Qt::CheckStateRole && index.column() == 1) {
         SVNEntry *entry = static_cast<SVNEntry *>(index.internalPointer());
         if (entry->isSelected())
             return QVariant(Qt::Checked);
@@ -29,13 +29,13 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     if (role != Qt::DisplayRole && role != Qt::EditRole)
         return QVariant();
 
-    if(index.column() == 0)
+    if(index.column() == 1)
         return QVariant();
 
-    if(index.column() == 1)
+    if(index.column() == 2)
         return QVariant(SVNManager::getInstance().getEntryList()[index.row()]->getRelativePath());
 
-    if(index.column() == 2) {
+    if(index.column() == 0) {
         switch(SVNManager::getInstance().getEntryList()[index.row()]->getStatus()) {
             case SVNEntry::Modified:
                 return QVariant("modified");
@@ -76,7 +76,7 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    if (index.column() == 0) {
+    if (index.column() == 1) {
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEditable;
     }
 
@@ -88,13 +88,13 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
             if (section == 0)
-                return QVariant("");
+                return QVariant("Status");
 
             if (section == 1)
-                return QVariant("File");
+                return QVariant("");
 
             if (section == 2)
-                return QVariant("Status");
+                return QVariant("File");
         }
     }
     return QVariant();
