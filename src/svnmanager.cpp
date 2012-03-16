@@ -7,6 +7,14 @@
 #include <stdio.h>
 #include "mainwindow.h"
 
+#if _WINDOWS
+#define pipeOpen _popen
+#define pipeClose _pclose
+#else
+#define pipeOpen popen
+#define pipeClose pclose
+#endif
+
 // Public:
 
 void SVNManager::Job::addLog(const QString & text)
@@ -29,7 +37,7 @@ void SVNManager::AnalyzeJob::run()
 
     command += "svn st";
 
-    fp = popen(command.toAscii(), "r");
+    fp = pipeOpen(command.toAscii(), "r");
 
     if (fp == NULL)
         return;
@@ -39,7 +47,7 @@ void SVNManager::AnalyzeJob::run()
         addLog(".");
     }
 
-    pclose(fp);
+    pipeClose(fp);
 
 
     SVNManager::getInstance().currentPath = path;
@@ -63,7 +71,7 @@ void SVNManager::CommitJob::run()
 
     command += "-m \"" + message + "\"";
 
-    fp = popen(command.toAscii(), "r");
+    fp = pipeOpen(command.toAscii(), "r");
 
     if (fp == NULL)
         return;
@@ -72,7 +80,7 @@ void SVNManager::CommitJob::run()
         addLog(buffer);
     }
 
-    pclose(fp);
+    pipeClose(fp);
 
     QMetaObject::invokeMethod(&MainWindow::getInstance(), "commitTerminated", Qt::QueuedConnection, Q_ARG(bool, true));
 }
