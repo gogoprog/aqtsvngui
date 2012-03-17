@@ -38,19 +38,19 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     if(index.column() == 0) {
         switch(SVNManager::getInstance().getEntryList()[index.row()]->getStatus()) {
             case SVNEntry::Modified:
-                return QVariant("modified");
+                return QVariant("M");
                 break;
             case SVNEntry::Unversioned:
-                return QVariant("unversioned");
+                return QVariant("?");
                 break;
             case SVNEntry::Deleted:
-                return QVariant("deleted");
+                return QVariant("D");
                 break;
             case SVNEntry::Added:
-                return QVariant("added");
+                return QVariant("A");
                 break;
             default:
-                return QVariant("?");
+                return QVariant("#");
                 break;
         }
     }
@@ -60,7 +60,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 
 bool TreeModel::setData(const QModelIndex & index, const QVariant & /*value*/, int /*role*/)
 {
-    if (index.column() == 0) {
+    if (index.column() == 1) {
         SVNEntry *entry = static_cast<SVNEntry *>(index.internalPointer());
 
         entry->setIsSelected(!entry->isSelected());
@@ -85,18 +85,43 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 
 QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal) {
-        if (role == Qt::DisplayRole) {
-            if (section == 0)
-                return QVariant("Status");
-
-            if (section == 1)
+    switch(orientation) {
+    case Qt::Horizontal:            
+        switch(role) {
+        case Qt::DisplayRole :
+            switch(section) {
+            case 0:
+                return QVariant("S");
+                break;
+            case 1:
                 return QVariant("");
-
-            if (section == 2)
-                return QVariant("File");
-        }
+                break;
+            case 2:
+                return QVariant("Relative file path");
+                break;
+            }
+            break;
+        case Qt::ToolTipRole :
+            switch(section) {
+            case 0:
+                return QVariant("Status");
+                break;
+            case 1:
+                return QVariant("Selected");
+                break;
+            case 2:
+                return QVariant("Relative file path");
+                break;
+            }
+            break;
+        default:
+            break;
+        }        
+        break;
+    default:
+        break;
     }
+    
     return QVariant();
 }
 
