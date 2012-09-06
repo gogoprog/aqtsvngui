@@ -3,6 +3,7 @@
 
 #include <QtGui/QWidget>
 #include "ui_aqtsvngui.h"
+class ContextMenu;
 
 class MainWindow : public QWidget
 {
@@ -32,6 +33,7 @@ public slots:
     void addLog(const QString &line);
     void analyzeTerminated(bool success);
     void commitTerminated(bool success);
+    void treeViewMousePressEvent(QMouseEvent * event);
 
 private:
     void fillFromPath(const QString & path);
@@ -39,6 +41,7 @@ private:
 
     static MainWindow *instance;
     Ui::aqtsvnguiClass ui;
+    ContextMenu *contextMenu;
 };
 
 #endif

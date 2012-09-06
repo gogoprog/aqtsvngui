@@ -6,6 +6,7 @@
 #include "treemodel.h"
 #include "svnmanager.h"
 #include "svnentry.h"
+#include "contextmenu.h"
 
 // Public:
 
@@ -17,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     instance = this;
 
     ui.setupUi(this);
+
+    contextMenu = new ContextMenu();
 
     currentPath = QDir::currentPath();
 
@@ -122,6 +125,8 @@ void MainWindow::commitTerminated(bool success)
 {
     if(success)
         ui.commitButton->setText("Ok");
+    else
+        ui.commitButton->setText("Retry");
 }
 
 // Private:
