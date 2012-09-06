@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QTextCursor>
 #include <QFileDialog>
+#include <QMouseEvent>
 #include "treemodel.h"
 #include "svnmanager.h"
 #include "svnentry.h"
@@ -19,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui.setupUi(this);
 
-    contextMenu = new ContextMenu();
+    contextMenu = new ContextMenu(ui.treeView);
 
     currentPath = QDir::currentPath();
 
@@ -127,6 +128,12 @@ void MainWindow::commitTerminated(bool success)
         ui.commitButton->setText("Ok");
     else
         ui.commitButton->setText("Retry");
+}
+
+void MainWindow::treeViewContextMenuRequested(const QPoint & pos)
+{
+
+        contextMenu->show();
 }
 
 // Private:

@@ -10,6 +10,9 @@
     <height>595</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::CustomContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>aqtsvngui</string>
   </property>
@@ -338,6 +341,22 @@
     <hint type="sourcelabel">
      <x>524</x>
      <y>37</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>276</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeView</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>aqtsvnguiClass</receiver>
+   <slot>treeViewContextMenuRequested(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>276</x>
+     <y>176</y>
     </hint>
     <hint type="destinationlabel">
      <x>276</x>

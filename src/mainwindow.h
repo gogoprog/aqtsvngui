@@ -33,7 +33,7 @@ public slots:
     void addLog(const QString &line);
     void analyzeTerminated(bool success);
     void commitTerminated(bool success);
-    void treeViewMousePressEvent(QMouseEvent * event);
+    void treeViewContextMenuRequested(const QPoint & pos);
 
 private:
     void fillFromPath(const QString & path);
