@@ -34,6 +34,7 @@ public slots:
     void analyzeTerminated(bool success);
     void commitTerminated(bool success);
     void treeViewContextMenuRequested(const QPoint & pos);
+    void listClicked(const QModelIndex & index);
 
 private:
     void fillFromPath(const QString & path);

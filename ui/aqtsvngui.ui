@@ -86,7 +86,11 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QTreeView" name="treeView"/>
+          <widget class="QTreeView" name="treeView">
+           <property name="contextMenuPolicy">
+            <enum>Qt::CustomContextMenu</enum>
+           </property>
+          </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
@@ -353,6 +357,22 @@
    <signal>customContextMenuRequested(QPoint)</signal>
    <receiver>aqtsvnguiClass</receiver>
    <slot>treeViewContextMenuRequested(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>276</x>
+     <y>176</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>276</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeView</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>aqtsvnguiClass</receiver>
+   <slot>listClicked(QModelIndex)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>276</x>

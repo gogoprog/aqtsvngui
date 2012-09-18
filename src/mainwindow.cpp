@@ -4,6 +4,7 @@
 #include <QTextCursor>
 #include <QFileDialog>
 #include <QMouseEvent>
+#include <QDebug>
 #include "treemodel.h"
 #include "svnmanager.h"
 #include "svnentry.h"
@@ -132,8 +133,16 @@ void MainWindow::commitTerminated(bool success)
 
 void MainWindow::treeViewContextMenuRequested(const QPoint & pos)
 {
+    SVNEntry * entry = (SVNEntry*)ui.treeView->indexAt(pos).internalPointer();
 
-        contextMenu->show();
+    if(entry){
+        contextMenu->init(entry,QCursor::pos());
+    }
+}
+
+void MainWindow::listClicked(const QModelIndex & /*index*/)
+{
+    qDebug() << "clicked";
 }
 
 // Private:

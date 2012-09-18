@@ -1,6 +1,7 @@
 #include "contextmenu.h"
 
 #include <QMenu>
+#include "svnentry.h"
 
 ContextMenu::ContextMenu(QWidget *parent)
 : QMenu(parent)
@@ -11,6 +12,11 @@ ContextMenu::ContextMenu(QWidget *parent)
 
 ContextMenu::~ContextMenu()
 {
+}
+
+void ContextMenu::init(SVNEntry *entry, const QPoint & pos)
+{
+    this->popup(pos, 0);
 }
 
 
