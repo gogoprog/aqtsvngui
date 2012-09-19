@@ -14,24 +14,23 @@ class ContextMenu : public QMenu
 
 public:
 
-    struct MenuAction
+    struct Action
     {
         QString text;
         QString command;
-        QString icon;
     };
 
     ContextMenu(QWidget *parent = 0);
     virtual ~ContextMenu();
 
-    void init(SVNEntry *entry, const QPoint & pos);
+    void setup(SVNEntry *entry, const QPoint & pos);
 
 public slots:
     void actionClicked(QAction *action);
 
 private:
     SVNEntry *entry;
-    QMap<QAction*,MenuAction> actionMap;
+    QMap<QAction*,Action> actionMap;
 };
 
 #endif

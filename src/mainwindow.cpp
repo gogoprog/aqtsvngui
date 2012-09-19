@@ -136,7 +136,7 @@ void MainWindow::treeViewContextMenuRequested(const QPoint & pos)
     SVNEntry * entry = (SVNEntry*)ui.treeView->indexAt(pos).internalPointer();
 
     if(entry){
-        contextMenu->init(entry,QCursor::pos());
+        contextMenu->setup(entry,QCursor::pos());
     }
 }
 

@@ -1,10 +1,8 @@
 #ifndef Settings_H
 #define Settings_H
 
-#include <QMenu>
-#include <QModelIndex>
-#include <QVariant>
-#include <QMap>
+#include <QList>
+#include "contextmenu.h"
 class QSettings;
 
 class Settings
@@ -22,8 +20,11 @@ public:
 
     void initialize();
 
+    const QList<ContextMenu::Action> & getActionList() const { return actionList; }
+
 private:
     QSettings *settings;
+    QList<ContextMenu::Action> actionList;
 };
 
 #endif
