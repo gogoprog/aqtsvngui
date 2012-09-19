@@ -9,7 +9,7 @@ INCLUDEPATH += . src
 CONFIG += qt debug
 
 # Input
-HEADERS += src/mainwindow.h src/svnentry.h src/svnmanager.h src/treemodel.h
+HEADERS += src/mainwindow.h src/svnentry.h src/svnmanager.h src/treemodel.h src/contextmenu.h
 FORMS += ui/aqtsvngui.ui
 SOURCES += src/main.cpp \
            src/mainwindow.cpp \

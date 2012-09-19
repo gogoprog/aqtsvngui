@@ -4,19 +4,34 @@
 #include <QMenu>
 #include <QModelIndex>
 #include <QVariant>
+#include <QMap>
 class QPoint;
 class SVNEntry;
 
 class ContextMenu : public QMenu
 {
+    Q_OBJECT
 
 public:
+
+    struct MenuAction
+    {
+        QString text;
+        QString command;
+        QString icon;
+    };
+
     ContextMenu(QWidget *parent = 0);
-    ~ContextMenu();
+    virtual ~ContextMenu();
 
     void init(SVNEntry *entry, const QPoint & pos);
-private:
 
+public slots:
+    void actionClicked(QAction *action);
+
+private:
+    SVNEntry *entry;
+    QMap<QAction*,MenuAction> actionMap;
 };
 
 #endif
