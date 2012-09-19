@@ -142,7 +142,6 @@ void MainWindow::treeViewContextMenuRequested(const QPoint & pos)
 
 void MainWindow::listClicked(const QModelIndex & /*index*/)
 {
-    qDebug() << "clicked";
 }
 
 // Private:
