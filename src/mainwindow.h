@@ -43,6 +43,7 @@ private:
     static MainWindow *instance;
     Ui::aqtsvnguiClass ui;
     ContextMenu *contextMenu;
+    bool itHasSucceeded;
 };
 
 #endif

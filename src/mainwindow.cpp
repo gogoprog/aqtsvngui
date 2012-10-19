@@ -12,8 +12,9 @@
 
 // Public:
 
-MainWindow::MainWindow(QWidget *parent)
-    : QWidget(parent)
+MainWindow::MainWindow(QWidget *parent) :
+    QWidget(parent),
+    itHasSucceeded(false)
 {
     QString currentPath;
 
@@ -61,7 +62,11 @@ void MainWindow::browseButtonClicked()
 
 void MainWindow::commitButtonClicked()
 {
-    SVNManager::getInstance().commit(ui.textEdit->toPlainText());
+    if(!itHasSucceeded){
+        SVNManager::getInstance().commit(ui.textEdit->toPlainText());
+    } else {
+        close();
+    }
 }
 
 void MainWindow::lineEditReturnPressed()
@@ -125,10 +130,13 @@ void MainWindow::analyzeTerminated(bool success)
 
 void MainWindow::commitTerminated(bool success)
 {
-    if(success)
+    if(success){
         ui.commitButton->setText("Ok");
-    else
+        itHasSucceeded = true;
+    }
+    else{
         ui.commitButton->setText("Retry");
+    }
 }
 
 void MainWindow::treeViewContextMenuRequested(const QPoint & pos)
