@@ -30,7 +30,9 @@ void ContextMenu::actionClicked(QAction *_action)
     QString command;
     Action & action = actionMap[_action];
 
-    command = action.command.replace("%f",entry->getRelativePath());
+    command = action.command;
+
+    command = command.replace("%f", entry->getRelativePath());
 
     system(command.toAscii());
 }

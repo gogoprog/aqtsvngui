@@ -86,7 +86,7 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     switch(orientation) {
-    case Qt::Horizontal:            
+    case Qt::Horizontal:
         switch(role) {
         case Qt::DisplayRole :
             switch(section) {
