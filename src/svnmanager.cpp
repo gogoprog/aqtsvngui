@@ -88,6 +88,7 @@ void SVNManager::CommitJob::run()
 SVNManager::SVNManager()
 {
     memset(filterIsEnabled, 1, sizeof(bool) * FilterCount);
+    filterIsEnabled[SVNEntry::Unknown] = false;
 }
 
 SVNManager::~SVNManager()
@@ -171,6 +172,6 @@ void SVNManager::parseLine(const QString & line)
 
     entry->relativePath = fieldList[lastFieldIndex];
 
-    if(filterIsEnabled[int(entry->status)])
+    if(filterIsEnabled[int(entry->status)] && entry->status != SVNEntry::Unknown)
         entryList.push_back(entry);
 }
